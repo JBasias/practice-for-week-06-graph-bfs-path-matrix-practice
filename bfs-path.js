@@ -1,4 +1,18 @@
-function findNeighbors(node, matrix) {
+function findNeighbors(N, M) {
+
+    let n=M.length; let m=M[0].length;
+    let ret=[]; let x = N[0]; let y=N[1];
+
+    if(y>0) ret.push([x,y-1]);
+    if(y<m-1) ret.push([x,y+1]);
+
+    if(x>0) ret.push([x-1,y]);
+    if(x<n-1) ret.push([x+1,y]);
+
+
+
+    return ret;
+
     // Up
 
     // Down
@@ -10,15 +24,53 @@ function findNeighbors(node, matrix) {
     // Your code here
 }
 
+function bfsPath(M, S, E) {
+    //let B = [S];
 
-function bfsPath(matrix, startNode, endValue) {
-    // Your code here
+    //if(M[S[0]][S[1]]==E)
+
+    let B = new Set(); let m=M[0].length;
+
+    B.add(S[0]*m + S[1]);
+    let Q = [S]; let cur; let Is=false;
+    let ret=[];
+
+    if(M[S[0]][S[1]] === E) return Q;
+
+    //console.log(B);
+
+    while (Q.length !== 0) {
+
+      //console.log(B.length);
+      cur = Q.shift();
+      ret.push(cur);
+      // Check if the current position (cur) has the value E
+      if (M[cur[0]][cur[1]] === E) Is=true;
+       // return true; // Found the value E
+     // }
+
+      for (const v of findNeighbors(cur, M)) {
+        if (!B.has(v[0]*m + v[1])) {
+
+          B.add(v[0]*m + v[1]);
+          //B.add(v);
+          Q.push(v);
+        }
+      }
+    }
+
+    if(!Is) return false;
+    //console.log(ret);
+
+    return ret;
 }
+
+
 
 
 // ***** UNCOMMENT FOR LOCAL TESTING *****
 
-// const matrix1 = [ 
+// const matrix1 = [
 //     [  1,  2,  3,  4 ],
 //     [  5,  6,  7,  8 ],
 //     [  9, 10, 11, 12 ],
@@ -60,11 +112,11 @@ function bfsPath(matrix, startNode, endValue) {
 // // value is located at start node
 // // [ [ 2, 2 ] ]
 
-// console.log(bfsPath(matrix1, [1,2], 8)); // can handle various start nodes 
+// console.log(bfsPath(matrix1, [1,2], 8)); // can handle various start nodes
 // // and end values
 // // [ [ 1, 2 ], [ 0, 2 ], [ 2, 2 ], [ 1, 1 ], [ 1, 3 ] ]
 
-// console.log(bfsPath(matrix1, [0,0], 17)); // can return false if end value 
+// console.log(bfsPath(matrix1, [0,0], 17)); // can return false if end value
 // // is not found
 // // false
 
